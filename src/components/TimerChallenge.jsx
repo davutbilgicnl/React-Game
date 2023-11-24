@@ -1,17 +1,25 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+
+// let timer;// shouldn't use this
 
 export default function TimerChallenge({ title, targetTime }) {
+  const timer = useRef(); //should use this. So, every challenge can be reaching own timer when being multiple clicks on
   const [timerStarted, setTimerStarted] = useState(false);
   const [timerExpired, setTimeExpired] = useState(false);
 
+  // let timer;// shouldn't use this
+
   function handleStart() {
-    setTimeout(() => {
+    timer.current = setTimeout(() => {
       setTimeExpired(true);
     }, targetTime * 1000);
 
     setTimerStarted(true);
   }
 
+  function handleStop() {
+    clearTimeout(timer.current);
+  }
   return (
     <section className="challenge">
       <h2>{title}</h2>
@@ -20,7 +28,7 @@ export default function TimerChallenge({ title, targetTime }) {
         {targetTime} second{targetTime > 1 ? "s" : ""}
       </p>
       <p>
-        <button onClick={handleStart}>
+        <button onClick={timerStarted ? handleStop : handleStart}>
           {timerStarted ? "Stop" : "Start"} challenge
         </button>
       </p>
