@@ -5,6 +5,7 @@ import ResultModal from "./ResultModal";
 
 export default function TimerChallenge({ title, targetTime }) {
   const timer = useRef(); //should use this. So, every challenge can be reaching own timer when being multiple clicks on
+  const dialog = useRef();
   const [timerStarted, setTimerStarted] = useState(false);
   const [timerExpired, setTimeExpired] = useState(false);
 
@@ -13,6 +14,7 @@ export default function TimerChallenge({ title, targetTime }) {
   function handleStart() {
     timer.current = setTimeout(() => {
       setTimeExpired(true);
+      dialog.current.showModal();
     }, targetTime * 1000);
 
     setTimerStarted(true);
@@ -23,7 +25,7 @@ export default function TimerChallenge({ title, targetTime }) {
   }
   return (
     <>
-      {timerExpired && <ResultModal targetTime={targetTime} result="lost" />}
+      <ResultModal ref={dialog} targetTime={targetTime} result="lost" />
       <section className="challenge">
         <h2>{title}</h2>
         <p className="challenge-time">
